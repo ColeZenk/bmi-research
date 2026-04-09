@@ -15,3 +15,7 @@
 ---
 # Technilogical limitations
 
+---
+# Case studies
+
+--- 
