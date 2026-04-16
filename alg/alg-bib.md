@@ -3,8 +3,7 @@
 ---
 ---
 
-**Llobet, V., Wyngaard, A., & Barbour, B. (2022). Automatic post-processing and merging of multiple spike-sorting analyses with Lussac.** 
-*bioRxiv.*  [https://doi.org/10.1101/2022.02.08.479192](https://doi.org/10.1101/2022.02.08.479192)
+**Llobet, V., Wyngaard, A., & Barbour, B. (2022). Automatic post-processing and merging of multiple spike-sorting analyses with Lussac.** *bioRxiv.*  [https://doi.org/10.1101/2022.02.08.479192](https://doi.org/10.1101/2022.02.08.479192)
 
 ---
 
@@ -30,8 +29,7 @@ squeeze more signal out of noisy, low-SNR channels.
 ---
 ---
 
-**Shevchenko, O., Yeremeieva, S., & Laschowski, B. (2024). Comparative analysis of neural decoding algorithms for brain-machine interfaces.** 
-*bioRxiv.* [https://doi.org/10.1101/2024.12.05.627080](https://doi.org/10.1101/2024.12.05.627080)
+**Shevchenko, O., Yeremeieva, S., & Laschowski, B. (2024). Comparative analysis of neural decoding algorithms for brain-machine interfaces.** *bioRxiv.* [https://doi.org/10.1101/2024.12.05.627080](https://doi.org/10.1101/2024.12.05.627080)
 
 ---
 
@@ -57,10 +55,10 @@ evaluating algorithm trade-offs in real-time constrained systems.
 ---
 ---
 
-**Zhu, B., Shin, U., & Shoaran, M. (2021). Closed-loop neural prostheses with on-chip intelligence: A review and a low-latency machine learning model for brain state detection.** 
-*IEEE Transactions on Biomedical Circuits and Systems, 15* (5), 877–897. 
-[https://doi.org/10.1109/TBCAS.2021.3112756](https://doi.org/10.1109/TBCAS.2021.3112756)
+**Zhu, B., Shin, U., & Shoaran, M. (2021). Closed-loop neural prostheses with on-chip intelligence: A review and a low-latency machine learning model for brain state detection.** *IEEE Transactions on Biomedical Circuits and Systems, 15* (5), 877–897. [https://doi.org/10.1109/TBCAS.2021.3112756](https://doi.org/10.1109/TBCAS.2021.3112756)
+
 ---
+
 This paper is the most hardware-oriented of the three, focusing on how ML-based 
 neural decoding algorithms are actually realized in silicon for real-time, 
 closed-loop prostheses. The review covers on-chip implementations across 
