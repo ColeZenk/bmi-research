@@ -1,0 +1,58 @@
+Case 1: Decoding attempted keyboard presses https://www.nature.com/articles/s41593-026-02218-y
+
+The goal of this experiment was to decode attempted keyboard presses in patients with paralysis
+by using brain activity to determine what keys they were trying to press. This study used an
+intracortical Brain Computer Interface (BCI) typing neuroprosthesis and tested it on two human participants.
+The first participant, T17, was a 33 year old man with ALS. The second participant, T18, was a 48 year old man with
+tetraplegia caused by a cervical spinal cord injury. Implanted microelectrode arrays recorded neural activity from 
+the precentral gyrus while the participants attempted finger movements that matched QWERTY keyboard presses. 
+The system used 30 total keys, including the alphabet, space, and punctuation. Different attempted finger
+flexion and extension movements were mapped to different keys. A recurrent neural network decoded the neural activity
+into character probabilities, and a 5-gram language model improved the final sentence output. Before testing full
+sentence typing, the researchers showed that individual attempted finger movements could be identified from brain
+activity alone. Offline decoding accuracy for 30 isolated finger movements was 81.3% for T17 and 95.2% for T18. 
+The main finding of the study was that both participants were able to communicate through attempted typing, with
+the best performance coming from T18. T18 reached a peak speed of 110 characters per minute, which was about
+22 words per minute, with a 1.6% word error rate after language model correction. T17 reached a peak of about
+47 characters per minute. The researchers concluded that this was the fastest reported hand-motor intracortical
+BCI communication method at the time and that attempted finger movements could be decoded accurately enough to
+support practical communication in people with paralysis. 
+
+Case 2: https://neuralink.com/updates/prime-study-progress-update/
+
+The goal of this case study was to test whether a brain computer interface could decode brain signals to allow 
+for a paralyzed patient to control a cursor. The participant was an adult with paralysis, and after implantation
+the system was able to detect neural signals shortly after surgery. According to the source, the participant then
+used the BCI system for digital tasks including playing online chess and Sid Meier’s Civilization VI. 
+The system used Neuralink’s N1 Implant, which is an intracortical brain computer interface designed to record
+neural activity through 1,024 electrodes distributed across 64 flexible threads. These signals were processed
+by electronics inside the implant and then wirelessly transmitted to external software. That software decoded
+the neural data into actions such as movement of a cursor on a computer screen. The implant was powered by an
+internal battery and charged wirelessly, allowing it to remain fully implanted under the scalp without external
+connectors. For the implantation, researchers used functional MRI before surgery to identify the area of the
+brain active during attempted hand and arm movement. This was used to target the precentral gyrus for thread 
+insertion. The surgery involved exposing the target cortical region, using Neuralink’s R1 surgical robot to insert
+the threads, and then mounting the implant into the skull area before closing the scalp. The main finding from this
+case study is that Neuralink was able to successfully implant a human BCI device, detect usable neural signals,
+and use those signals to allow a participant with paralysis to control digital applications through cursor-based
+interaction. 
+
+Case 3: https://www.nature.com/articles/s41586-023-06377-x?utm
+
+The goal of this experiment was to decode attempted speech in a patient who could no longer speak clearly because
+of ALS. This study used an intracortical speech brain computer interface and tested it on one participant, T12,
+who had bulbar-onset ALS and could still make some limited orofacial movements and vocalizations but could not
+produce intelligible speech. Microelectrode arrays were implanted in speech-related areas of the brain, and the 
+researchers recorded neural activity while the participant attempted to speak phonemes, words, and full sentences. 
+The system worked by recording neural activity from the implanted arrays and using a recurrent neural network to 
+decode that activity into phoneme probabilities over time. Those phoneme probabilities were then combined with a 
+language model to predict the most likely words and sentences. Before testing full sentence decoding, the 
+researchers first showed that neural activity related to speech was strong enough to separate different attempted 
+speech movements. They were able to decode 33 orofacial movements with 92% accuracy, 39 phonemes with 62% accuracy, 
+and 50 words with 94% accuracy using simple classification methods. The main finding of the study was that the 
+participant was able to communicate through attempted speech at a much faster rate than previous brain computer 
+interface communication methods. The participant reached 62 words per minute, with a 9.1% word error rate on a 
+50-word vocabulary and a 23.8% word error rate on a 125,000-word vocabulary. According to the researchers, this 
+was the first successful demonstration of large-vocabulary speech decoding with this type of system and showed 
+that speech-related neural signals remained detailed enough years after paralysis to support rapid communication. 
+
