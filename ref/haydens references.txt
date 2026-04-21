@@ -10,6 +10,10 @@ www.engineering.columbia.edu/about/news/silicon-chips-brain-researchers-announce
 References
 Gao, Weihang, et al. “Revolutionizing Brain‒computer Interfaces: Overcoming Biocompatibility Challenges in Implantable Neural Interfaces.” Journal of Nanobiotechnology, U.S. National Library of Medicine, 10 July 2025, pmc.ncbi.nlm.nih.gov/articles/PMC12243264/. 
 
+
+
 Kreg, Martin. “Brain-Computer Interfaces: Exploring the Last Frontier.” byFounders VC, byFounders, 18 Feb. 2025, www.byfounders.vc/insights/brain-computer-interfaces. 
+
+
 
 Hoos, Michele. “Silicon Chips on the Brain: Researchers Announce a New Generation of Brain-Computer Interface .” Columbia Engineering, 8 Dec. 2025, www.engineering.columbia.edu/about/news/silicon-chips-brain-researchers-announce-new-generation-brain-computer-interface.

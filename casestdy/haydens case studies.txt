@@ -1,0 +1,9 @@
+https://pmc.ncbi.nlm.nih.gov/articles/PMC12243264/
+ 
+One study demonstrated long-term neural recording in epilepsy patients using implanted platinum microwire electrodes for up to 15 months, showing clinical feasibility and reliability. In animal studies, ultra flexible mesh electronics injected into rodent brains showed minimal immune response and stable signal recording over 4–12 weeks, while ECM-coated electrodes caused significantly less brain damage and reduced scar formation three months after implantation.
+
+
+www.engineering.columbia.edu/about/news/silicon-chips-brain-researchers-announce-new-generation-brain-computer-interface
+
+The article describes preclinical testing of the Biological Interface System to Cortex (BISC), which demonstrated stable neural recording in motor and visual cortices during surgical settings. Evidence from the study shows that the implant has already been tested in real surgical environments and is moving toward human use, with short-term intraoperative human studies currently underway. Additionally, the system is being developed for treating drug-resistant epilepsy through a National Institutes of Health–funded project and has potential applications for conditions such as spinal cord injury, ALS, stroke, and blindness by restoring motor, speech, and visual functions.
+
