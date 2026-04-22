@@ -2,6 +2,18 @@ https://pmc.ncbi.nlm.nih.gov/articles/PMC12243264/
 
  The article explains that the body’s immune response leads to inflammation, glial scar formation, and neuronal death, which degrade signal quality by increasing the distance between electrodes and neurons and lowering the signal-to-noise ratio. Evidence shows that microglia respond within 30 minutes of implantation, and astrocytes form a glial scar over weeks, physically isolating the device. Additional challenges include mechanical mismatch, where rigid electrodes (in the GPa range) contrast sharply with soft brain tissue (~1 kPa), as well as micromotion that reduces cell viability and increases tissue damage. The article also notes that oxidative stress from reactive oxygen species can corrode electrode materials and contribute to device failure. 
 
+
+
+
 www.engineering.columbia.edu/about/news/silicon-chips-brain-researchers-announce-new-generation-brain-computer-interface
 
  limitations of current BCI system. Existing devices require large implanted canisters and invasive procedures such as removing parts of the skull or routing wires through the body. Evidence shows that BISC addresses these issues by reducing size to less than 1/1000th of conventional devices and using a thin 50 μm chip that can be inserted with minimal invasion, though challenges such as long-term signal stability, tissue reactivity, and the need for continued human testing still remain.
+
+
+
+
+https://www.byfounders.vc/insights/brain-computer-interfaces
+
+
+
+Despite these advancements, the article emphasizes significant technological limitations. Non-invasive BCIs suffer from low signal quality due to interference from the skull and scalp, while many systems still rely on outdated EEG technology developed in 1924. Evidence shows that high-resolution alternatives like MEG are bulky and expensive, and invasive systems face risks such as infection, long-term complications, and declining signal stability due to scarring and tissue movement. The article also highlights the difficulty of decoding brain signals, comparing current systems to “Morse code,” as well as challenges related to limited neural data, complex calibration requirements, high manufacturing costs, and strict regulatory approval processes.
