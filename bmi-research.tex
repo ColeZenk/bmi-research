@@ -1,0 +1,363 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{enumitem}
+
+\title{BMI Research --- Annotated Bibliography}
+\author{Cole Zenk, Hayden, Kaden}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This annotated bibliography surveys the current state of brain--machine
+interface (BMI) research across three axes: the algorithms and digital
+signal processing pipelines that turn raw neural recordings into usable
+control signals, the technological and biological limitations that still
+constrain implantable systems, and the clinical case studies that
+demonstrate what BMIs can do today. Algorithmic sources cover spike
+sorting, comparative neural decoding pipelines, and on-chip machine
+learning for closed-loop prostheses. Limitations are examined through the
+lenses of biocompatibility, device size and invasiveness, and signal
+quality. Case studies include intracortical typing, cursor control via
+Neuralink's N1 implant, and large-vocabulary speech decoding in patients
+with ALS or paralysis. Together these sources frame the open question
+driving this project: how machine learning and embedded hardware
+co-design will shape the next generation of BMIs.
+\end{abstract}
+
+\section*{Research Questions}
+\begin{itemize}
+  \item How do BMIs work? What algorithms/techniques are used?
+  \item What are the limitations of BMIs? Where have these shortcomings manifested in practice?
+  \item How will ML impact BMIs?
+\end{itemize}
+
+\section*{Key Definitions}
+\begin{description}
+  \item[BMI] Brain machine interface.
+\end{description}
+
+% =====================================================================
+\section{Notable Algorithms}
+% =====================================================================
+
+\subsection*{Spike sorting --- Lussac \cite{llobet2022lussac}}
+This paper directly addresses a fundamental limitation in the spike-sorting step
+of the neural signal processing pipeline: no single algorithm performs optimally
+across all neuron types simultaneously. The authors introduce Lussac, a
+Python-based post-processing tool that runs multiple spike-sorting passes ---
+using tools like Kilosort and MountainSort with different filter bands and
+detection thresholds --- then automatically merges the outputs using a
+quality-guided cluster fusion algorithm. The quality metric combines cluster
+contamination (estimated via refractory period violations) and firing frequency,
+and merges are only accepted when they increase that score. Key DSP techniques
+include bandpass filtering tailored to spike type (300--6000~Hz for simple spikes;
+150--3000~Hz for complex spikes), cross-correlation-based spike alignment to
+reduce detection jitter, and coincident spike deduplication across analyses.
+Tested on cerebellar multielectrode recordings and the synthetic SpikeForest
+dataset, Lussac yielded roughly a 50\% increase in detected Purkinje cell
+clusters with both simple and complex spikes compared to either standalone
+sorter. The paper is particularly relevant for understanding why spike sorting
+is not a solved problem and how ensemble-based algorithmic approaches can
+squeeze more signal out of noisy, low-SNR channels.
+
+\subsection*{Comparative neural decoding \cite{shevchenko2024decoding}}
+This paper conducts one of the most comprehensive head-to-head evaluations
+of the full BCI decoding pipeline to date, testing 48 combinations of signal
+processing, feature extraction, and classification across 14 subjects (672
+total experiments). On the signal processing side, it compares artifact subspace
+reconstruction (ASR), surface Laplacian filtering (SLF), and a normalization
+baseline. Feature extraction methods include common spatial patterns (CSP),
+independent component analysis (ICA), and short-time Fourier transform (STFT).
+These are paired with four classifiers: SVM, LDA, CNN (EEGNet architecture), and
+LSTM. The EEG dataset uses a 1--20~Hz bandpass filter and 200~ms rolling windows
+with 160~ms overlap, optimized for decoding gait events from real-world walking.
+Top-line findings: CNNs consistently outperformed all other classifiers (best F1
+of $\sim$93\% with SLF+ICA); STFT feature extraction significantly degraded
+performance across the board (up to 25\% drop); and ASR, despite being widely
+used, often hurt accuracy or increased variance. Critically for embedded DSP
+applications, the paper also benchmarks computational footprint --- CNN model size
+was 0.03~MB versus 278.5~MB for SVM, and average inference time per segment was
+under 1~ms for most feature extractors. This makes it a valuable reference for
+evaluating algorithm trade-offs in real-time constrained systems.
+
+\subsection*{On-chip ML for closed-loop prostheses \cite{zhu2021closedloop}}
+This paper is the most hardware-oriented of the three, focusing on how ML-based
+neural decoding algorithms are actually realized in silicon for real-time,
+closed-loop prostheses. The review covers on-chip implementations across
+epilepsy, Parkinson's disease, and other neurological applications, with
+particular attention to application-specific integrated circuits (ASICs) and
+algorithm-hardware co-design. The authors introduce an energy-area (E-A) figure
+of merit to fairly compare across architectures accounting for channel count and
+sampling rate. The core contribution is the Depth-Variant Tree Ensemble (DVTE),
+a gradient-boosted decision tree classifier where trees of varying depths (1--4)
+run in parallel, allowing shallow trees to output early predictions while deeper
+trees correct errors. On a seizure detection task using intracranial EEG, DVTE
+reduced processing latency by 2.5x compared to a conventional uniform-depth
+ensemble with only a marginal drop in sensitivity ($<$3\%). A cost-aware learning
+framework further penalizes power-hungry and high-latency features (e.g.,
+low-frequency bandpower requiring long windows) during training, achieving a 3x
+power reduction and 1.7x latency reduction at the same accuracy operating point.
+The final DVTE classifier was implemented in TSMC 65~nm CMOS at $2.8~\mu W$
+and $0.31~mm^2$, achieving 5.6~nJ/class energy efficiency --- over 6x better than
+prior state-of-the-art. Directly relevant to the embedded DSP angle of this
+project, as it demonstrates how algorithm design decisions (tree depth, feature
+selection, quantization) have direct hardware consequences and must be
+co-optimized from the start.
+
+% =====================================================================
+\section{Relevant Professions}
+% =====================================================================
+
+The development and improvement of these systems involve professionals such as
+neurosurgeons, neuroscientists, and biomedical engineers, as evidenced by the
+clinical implantation procedures, animal experiments, and material design
+research described throughout the literature \cite{gao2025biocompat}.
+
+% =====================================================================
+\section{Technological Limitations}
+% =====================================================================
+
+\subsection*{Immune response and signal degradation \cite{gao2025biocompat}}
+The article explains that the body's immune response leads to inflammation,
+glial scar formation, and neuronal death, which degrade signal quality by
+increasing the distance between electrodes and neurons and lowering the
+signal-to-noise ratio. Evidence shows that microglia respond within 30 minutes
+of implantation, and astrocytes form a glial scar over weeks, physically
+isolating the device. Additional challenges include mechanical mismatch, where
+rigid electrodes (in the GPa range) contrast sharply with soft brain tissue
+($\sim$1~kPa), as well as micromotion that reduces cell viability and increases
+tissue damage. The article also notes that oxidative stress from reactive oxygen
+species can corrode electrode materials and contribute to device failure.
+
+\subsection*{Size and invasiveness of current systems \cite{hoos2025columbia}}
+Limitations of current BCI systems: existing devices require large implanted
+canisters and invasive procedures such as removing parts of the skull or routing
+wires through the body. Evidence shows that BISC addresses these issues by
+reducing size to less than 1/1000th of conventional devices and using a thin
+50~$\mu$m chip that can be inserted with minimal invasion, though challenges such
+as long-term signal stability, tissue reactivity, and the need for continued
+human testing still remain.
+
+\subsection*{Signal quality, decoding, and regulatory hurdles \cite{kreg2025byfounders}}
+Despite recent advancements, the article emphasizes significant technological
+limitations. Non-invasive BCIs suffer from low signal quality due to interference
+from the skull and scalp, while many systems still rely on outdated EEG
+technology developed in 1924. Evidence shows that high-resolution alternatives
+like MEG are bulky and expensive, and invasive systems face risks such as
+infection, long-term complications, and declining signal stability due to
+scarring and tissue movement. The article also highlights the difficulty of
+decoding brain signals, comparing current systems to ``Morse code,'' as well as
+challenges related to limited neural data, complex calibration requirements,
+high manufacturing costs, and strict regulatory approval processes.
+
+% =====================================================================
+\section{Case Studies}
+% =====================================================================
+
+\subsection*{Case 1: Decoding attempted keyboard presses \cite{case_keyboard2026}}
+The goal of this experiment was to decode attempted keyboard presses in patients
+with paralysis by using brain activity to determine what keys they were trying
+to press. This study used an intracortical Brain Computer Interface (BCI) typing
+neuroprosthesis and tested it on two human participants. The first participant,
+T17, was a 33 year old man with ALS. The second participant, T18, was a 48 year
+old man with tetraplegia caused by a cervical spinal cord injury. Implanted
+microelectrode arrays recorded neural activity from the precentral gyrus while
+the participants attempted finger movements that matched QWERTY keyboard
+presses. The system used 30 total keys, including the alphabet, space, and
+punctuation. Different attempted finger flexion and extension movements were
+mapped to different keys. A recurrent neural network decoded the neural activity
+into character probabilities, and a 5-gram language model improved the final
+sentence output. Before testing full sentence typing, the researchers showed
+that individual attempted finger movements could be identified from brain
+activity alone. Offline decoding accuracy for 30 isolated finger movements was
+81.3\% for T17 and 95.2\% for T18. The main finding of the study was that both
+participants were able to communicate through attempted typing, with the best
+performance coming from T18. T18 reached a peak speed of 110 characters per
+minute, which was about 22 words per minute, with a 1.6\% word error rate after
+language model correction. T17 reached a peak of about 47 characters per minute.
+The researchers concluded that this was the fastest reported hand-motor
+intracortical BCI communication method at the time and that attempted finger
+movements could be decoded accurately enough to support practical communication
+in people with paralysis.
+
+\subsection*{Case 2: Neuralink cursor control \cite{neuralink2024prime}}
+The goal of this case study was to test whether a brain computer interface
+could decode brain signals to allow for a paralyzed patient to control a
+cursor. The participant was an adult with paralysis, and after implantation the
+system was able to detect neural signals shortly after surgery. According to
+the source, the participant then used the BCI system for digital tasks
+including playing online chess and Sid Meier's Civilization VI. The system used
+Neuralink's N1 Implant, which is an intracortical brain computer interface
+designed to record neural activity through 1{,}024 electrodes distributed across
+64 flexible threads. These signals were processed by electronics inside the
+implant and then wirelessly transmitted to external software. That software
+decoded the neural data into actions such as movement of a cursor on a computer
+screen. The implant was powered by an internal battery and charged wirelessly,
+allowing it to remain fully implanted under the scalp without external
+connectors. For the implantation, researchers used functional MRI before
+surgery to identify the area of the brain active during attempted hand and arm
+movement. This was used to target the precentral gyrus for thread insertion.
+The surgery involved exposing the target cortical region, using Neuralink's R1
+surgical robot to insert the threads, and then mounting the implant into the
+skull area before closing the scalp. The main finding from this case study is
+that Neuralink was able to successfully implant a human BCI device, detect
+usable neural signals, and use those signals to allow a participant with
+paralysis to control digital applications through cursor-based interaction.
+
+\subsection*{Case 3: Speech decoding in ALS \cite{willett2023speech}}
+The goal of this experiment was to decode attempted speech in a patient who
+could no longer speak clearly because of ALS. This study used an intracortical
+speech brain computer interface and tested it on one participant, T12, who had
+bulbar-onset ALS and could still make some limited orofacial movements and
+vocalizations but could not produce intelligible speech. Microelectrode arrays
+were implanted in speech-related areas of the brain, and the researchers
+recorded neural activity while the participant attempted to speak phonemes,
+words, and full sentences. The system worked by recording neural activity from
+the implanted arrays and using a recurrent neural network to decode that
+activity into phoneme probabilities over time. Those phoneme probabilities were
+then combined with a language model to predict the most likely words and
+sentences. Before testing full sentence decoding, the researchers first showed
+that neural activity related to speech was strong enough to separate different
+attempted speech movements. They were able to decode 33 orofacial movements
+with 92\% accuracy, 39 phonemes with 62\% accuracy, and 50 words with 94\%
+accuracy using simple classification methods. The main finding of the study was
+that the participant was able to communicate through attempted speech at a much
+faster rate than previous brain computer interface communication methods. The
+participant reached 62 words per minute, with a 9.1\% word error rate on a
+50-word vocabulary and a 23.8\% word error rate on a 125{,}000-word vocabulary.
+According to the researchers, this was the first successful demonstration of
+large-vocabulary speech decoding with this type of system and showed that
+speech-related neural signals remained detailed enough years after paralysis to
+support rapid communication.
+
+\subsection*{Additional case: Handwriting BCI \cite{willett2021handwriting}}
+A paralyzed patient was able to write using a BCI that interprets brain signals
+during attempted handwriting motions, complementing the keyboard- and
+speech-based decoding paradigms above.
+
+\subsection*{Long-term recording and biocompatible electrodes \cite{gao2025biocompat}}
+One study demonstrated long-term neural recording in epilepsy patients using
+implanted platinum microwire electrodes for up to 15 months, showing clinical
+feasibility and reliability. In animal studies, ultra flexible mesh electronics
+injected into rodent brains showed minimal immune response and stable signal
+recording over 4--12 weeks, while ECM-coated electrodes caused significantly
+less brain damage and reduced scar formation three months after implantation.
+
+\subsection*{Preclinical BISC testing \cite{hoos2025columbia}}
+The article describes preclinical testing of the Biological Interface System to
+Cortex (BISC), which demonstrated stable neural recording in motor and visual
+cortices during surgical settings. Evidence from the study shows that the
+implant has already been tested in real surgical environments and is moving
+toward human use, with short-term intraoperative human studies currently
+underway. Additionally, the system is being developed for treating
+drug-resistant epilepsy through a National Institutes of Health--funded project
+and has potential applications for conditions such as spinal cord injury, ALS,
+stroke, and blindness by restoring motor, speech, and visual functions.
+
+\subsection*{Real-world BCI applications survey \cite{kreg2025byfounders}}
+The article describes several real-world applications of brain--computer
+interfaces (BCIs) across medical and technological fields. For example,
+speech-decoding systems developed by UCSF can convert neural activity into
+real-time text or speech at speeds of up to 62 words per minute, approaching
+normal conversation. Additionally, DARPA-funded projects have demonstrated
+brain-controlled prosthetic limbs capable of multi-fingered movement, while
+cochlear implants have already restored hearing for millions of patients.
+Evidence from the article also includes the case of Ian Burkhart, whose implant
+successfully restored function for years before being removed due to infection
+risks, and Meta AI's Brain2Qwerty system, which achieved a 19\% character error
+rate using non-invasive MEG and deep learning.
+
+% =====================================================================
+\section{Conclusion}
+% =====================================================================
+
+The literature surveyed here points to a field that has moved decisively
+from proof-of-concept to early clinical reality, but one whose progress
+is gated as much by hardware and biology as by algorithms. On the
+algorithmic side, ensemble spike sorting~\cite{llobet2022lussac},
+CNN-based decoders~\cite{shevchenko2024decoding}, and depth-variant tree
+ensembles co-designed with silicon~\cite{zhu2021closedloop} all show
+that meaningful gains in accuracy, latency, and power are still
+achievable --- but typically at the cost of tighter coupling between
+model and hardware. Case studies confirm the practical payoff: typing
+at 22~words per minute~\cite{case_keyboard2026}, cursor control in
+daily use~\cite{neuralink2024prime}, and 62~words per minute of decoded
+speech~\cite{willett2023speech} were all unthinkable a decade ago.
+
+At the same time, the limitations are sobering. Glial scarring,
+mechanical mismatch, and oxidative degradation continue to erode signal
+quality over months to years~\cite{gao2025biocompat}; non-invasive
+modalities remain bandwidth-limited~\cite{kreg2025byfounders}; and
+even state-of-the-art implants still trade off invasiveness against
+longevity~\cite{hoos2025columbia}. The throughline across the sources
+is that the next generation of BMIs will not be unlocked by any single
+discipline: progress requires neurosurgeons, neuroscientists,
+biomedical engineers, and ML researchers working against the same
+constraints. This project's focus on the embedded DSP and ML layer sits
+squarely in that intersection, and the works cited here form the
+foundation for the technical questions to be pursued next.
+
+% =====================================================================
+\begin{thebibliography}{99}
+
+\bibitem{llobet2022lussac}
+Llobet, V., Wyngaard, A., \& Barbour, B. (2022).
+\emph{Automatic post-processing and merging of multiple spike-sorting analyses with Lussac.}
+bioRxiv. \url{https://doi.org/10.1101/2022.02.08.479192}
+
+\bibitem{shevchenko2024decoding}
+Shevchenko, O., Yeremeieva, S., \& Laschowski, B. (2024).
+\emph{Comparative analysis of neural decoding algorithms for brain-machine interfaces.}
+bioRxiv. \url{https://doi.org/10.1101/2024.12.05.627080}
+
+\bibitem{zhu2021closedloop}
+Zhu, B., Shin, U., \& Shoaran, M. (2021).
+Closed-loop neural prostheses with on-chip intelligence: A review and a low-latency machine learning model for brain state detection.
+\emph{IEEE Transactions on Biomedical Circuits and Systems, 15}(5), 877--897.
+\url{https://doi.org/10.1109/TBCAS.2021.3112756}
+
+\bibitem{gao2025biocompat}
+Gao, W., et al. (2025, July 10).
+\emph{Revolutionizing brain--computer interfaces: Overcoming biocompatibility challenges in implantable neural interfaces.}
+Journal of Nanobiotechnology, U.S. National Library of Medicine.
+\url{https://pmc.ncbi.nlm.nih.gov/articles/PMC12243264/}
+
+\bibitem{kreg2025byfounders}
+Kreg, M. (2025, February 18).
+\emph{Brain-Computer Interfaces: Exploring the Last Frontier.}
+byFounders VC.
+\url{https://www.byfounders.vc/insights/brain-computer-interfaces}
+
+\bibitem{hoos2025columbia}
+Hoos, M. (2025, December 8).
+\emph{Silicon chips on the brain: Researchers announce a new generation of brain-computer interface.}
+Columbia Engineering.
+\url{https://www.engineering.columbia.edu/about/news/silicon-chips-brain-researchers-announce-new-generation-brain-computer-interface}
+
+\bibitem{case_keyboard2026}
+\emph{Decoding attempted keyboard presses from intracortical neural activity in people with paralysis.}
+Nature Neuroscience (2026).
+\url{https://www.nature.com/articles/s41593-026-02218-y}
+
+\bibitem{neuralink2024prime}
+Neuralink. \emph{PRIME Study Progress Update.}
+\url{https://neuralink.com/updates/prime-study-progress-update/}
+
+\bibitem{willett2023speech}
+Willett, F. R., et al. (2023).
+A high-performance speech neuroprosthesis. \emph{Nature.}
+\url{https://www.nature.com/articles/s41586-023-06377-x}
+
+\bibitem{willett2021handwriting}
+Willett, F. R., et al. (2021).
+High-performance brain-to-text communication via handwriting.
+\emph{Nature, 593,} 249--254.
+\url{https://www.nature.com/articles/s41586-021-03506-2}
+
+\end{thebibliography}
+
+\end{document}
